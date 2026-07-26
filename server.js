@@ -6,6 +6,7 @@ const path = require('node:path');
 
 const ROOT = __dirname;
 const PORT = Math.max(1, Number(process.env.PORT) || 3000);
+const HOST = process.env.HOST || '0.0.0.0';
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 const DATA_FILE = path.resolve(process.env.DATA_FILE || path.join(ROOT, 'data', 'state.json'));
 const MAX_BODY_SIZE = 256 * 1024;
@@ -156,7 +157,7 @@ const server = http.createServer(async (request, response) => {
   response.end('Not found');
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`OBS widget: http://localhost:${PORT}/`);
-  console.log(`Admin panel: http://localhost:${PORT}/admin`);
+server.listen(PORT, HOST, () => {
+  console.log(`OBS widget: http://${HOST}:${PORT}/`);
+  console.log(`Admin panel: http://${HOST}:${PORT}/admin`);
 });
