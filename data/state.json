@@ -1,0 +1,56 @@
+{
+  "rows": [
+    {
+      "name": "Gates of olympus 1000",
+      "buy": 10321,
+      "payout": 2540,
+      "opened": true
+    },
+    {
+      "name": "ппп",
+      "buy": 11111,
+      "payout": 323,
+      "opened": true
+    },
+    {
+      "name": "",
+      "buy": 0,
+      "payout": 0,
+      "opened": false
+    },
+    {
+      "name": "",
+      "buy": 0,
+      "payout": 0,
+      "opened": false
+    },
+    {
+      "name": "",
+      "buy": 0,
+      "payout": 0,
+      "opened": false
+    },
+    {
+      "name": "",
+      "buy": 0,
+      "payout": 0,
+      "opened": false
+    },
+    {
+      "name": "",
+      "buy": 0,
+      "payout": 0,
+      "opened": false
+    },
+    {
+      "name": "о",
+      "buy": 0,
+      "payout": 0,
+      "opened": false
+    }
+  ],
+  "currentIndex": 5,
+  "sessionNumber": "#13",
+  "currency": "₽",
+  "updatedAt": "2026-07-26T01:15:24.157Z"
+}

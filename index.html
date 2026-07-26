@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Bonus Buy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="widget">
+    <header class="widget-header">
+      <div class="bonus-badge" aria-hidden="true">BONUS</div>
+      <div class="title-wrap">
+        <h1><span>BONUSBUY</span><input id="sessionNumber" type="text" maxlength="12" value="#247" aria-label="Номер Bonus Buy" autocomplete="off"></h1>
+        <p>БОНУСНЫЕ ПОКУПКИ</p>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="Статистика бонусных покупок">
+      <article class="stat">
+        <span class="stat-icon coin" aria-hidden="true">●</span>
+        <strong id="totalBuy">0 ₽</strong>
+        <span class="stat-hint">ЗАКУП</span>
+      </article>
+      <article class="stat">
+        <span class="stat-icon scales" aria-hidden="true">⚖</span>
+        <strong id="neededX">0.00x</strong>
+        <span class="stat-hint">ДО ОКУПА</span>
+      </article>
+      <article class="stat">
+        <span class="stat-icon average" aria-hidden="true">×</span>
+        <strong id="averageX">0.00x</strong>
+        <span class="stat-hint">СРЕДНИЙ X</span>
+      </article>
+      <article class="stat">
+        <span class="stat-icon star" aria-hidden="true">★</span>
+        <strong id="counter">0/0</strong>
+        <span class="stat-hint">ОТКРЫТО</span>
+      </article>
+    </section>
+
+    <section id="openedSummary" class="opened-summary" aria-label="Открытые бонуски"></section>
+
+    <section id="bonusList" class="bonus-list" aria-label="Список бонусок" aria-live="polite"></section>
+
+    <button id="addRow" class="add-row" type="button">＋ ДОБАВИТЬ БОНУСКУ</button>
+    <div class="admin-controls">
+      <label for="currencySelect">ВАЛЮТА</label>
+      <select id="currencySelect" aria-label="Валюта виджета">
+        <option value="₽">₽ RUB</option>
+        <option value="$">$ USD</option>
+        <option value="€">€ EUR</option>
+        <option value="₸">₸ KZT</option>
+        <option value="₴">₴ UAH</option>
+        <option value="£">£ GBP</option>
+      </select>
+    </div>
+  </main>
+
+  <template id="rowTemplate">
+    <article class="bonus-row">
+      <span class="current-marker current-marker-start" aria-hidden="true"></span>
+      <span class="row-rank"><span class="row-number">1.</span></span>
+      <input class="name-input" type="text" maxlength="60" placeholder="НАЗВАНИЕ ИГРЫ" aria-label="Название игры" autocomplete="off">
+      <span class="buy-wrap">(<input class="buy-input" type="text" inputmode="decimal" placeholder="0" aria-label="Стоимость бонуски" autocomplete="off"><output class="buy-display"></output>)</span>
+      <span class="payout-wrap">= <input class="payout-input" type="text" inputmode="decimal" placeholder="" aria-label="Сколько дала бонусная игра" autocomplete="off"><output class="payout-display"></output></span>
+      <span class="current-marker current-marker-end" aria-hidden="true"></span>
+      <output class="row-x">0.00X</output>
+      <button class="delete-row" type="button" aria-label="Удалить бонуску">×</button>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
