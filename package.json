@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "description": "OBS-виджет BonusBuy для стримеров: закупы, иксы и окуп в реальном времени",
+  "description": "OBS overlay for streamers running bonus-buy sessions: live buy-in, multipliers, and break-even",
   "scripts": {
     "start": "node server.js",
     "check": "node --check server.js && node --check script.js"

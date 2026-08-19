@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="preview.png" alt="BonusBuy widget в OBS" width="420">
+  <img src="preview.png" alt="BonusBuy widget in OBS" width="420">
 </p>
 
 <h1 align="center">BonusBuy Widget</h1>
 
 <p align="center">
-  <strong>Оверлей для стримеров, которые крутят бонусные покупки в слотах.</strong><br>
-  Показывает закуп, средний икс, сколько нужно до окупа и текущую бонуску — прямо на сцене OBS.
+  <strong>An OBS overlay for streamers running bonus-buy sessions.</strong><br>
+  Live buy-in, average multiplier, break-even target, and the current bonus — right on stream.
 </p>
 
 <p align="center">
@@ -17,61 +17,61 @@
 
 ---
 
-## Зачем это нужно
+## Why it exists
 
-На стриме Bonus Buy зрители должны сразу видеть картину: сколько уже вложено, какие бонуски открыты, какой икс нужен, чтобы выйти в ноль, и какая игра крутится прямо сейчас.
+During a bonus-buy stream, chat should see the session at a glance: how much is already in, which bonuses are open, what multiplier is needed to break even, and which game is spinning right now.
 
-**BonusBuy Widget** — это маленький сервер и страница для OBS:
+**BonusBuy Widget** is a small Node.js server plus an OBS page:
 
-- **Публичный виджет** `/` — только показ. Зрители и браузерный источник OBS ничего не редактируют.
-- **Админка** `/admin` — стример или модератор вводит названия, цены и результаты. OBS подхватывает изменения сам.
+- **Public widget** `/` — display only. Viewers and the OBS browser source cannot edit anything.
+- **Admin panel** `/admin` — the streamer or a moderator enters names, prices, and results. OBS picks up changes on its own.
 
-Два окна, одни данные. Можно править список с телефона или второго компьютера, пока стрим идёт.
+Two windows, one shared state. You can update the list from a phone or a second PC while the stream is live.
 
-## Что видно на виджете
+## What the overlay shows
 
-| Иконка | Показатель | Смысл |
+| Icon | Stat | Meaning |
 | --- | --- | --- |
-| Монета | **Закуп** | Сумма всех бонусок в сессии |
-| Весы | **До окупа** | Средний икс, который нужен на *ещё не открытых* бонусках, чтобы выйти в ноль |
-| Крестик | **Средний X** | Средний икс уже открытых бонусок |
-| Звезда | **Открыто** | Сколько бонусок открыто из общего числа |
+| Coin | **Buy-in** | Total cost of every bonus in the session |
+| Scales | **To break even** | Average multiplier still needed on *unopened* bonuses to get back to zero |
+| Cross | **Average X** | Average multiplier of bonuses already opened |
+| Star | **Opened** | Opened bonuses vs the full list |
 
-Под шапкой виджет поднимает до двух лучших открытых бонусок (по иксу). Текущая строка помечена стрелками:
+Under the header, the widget pins up to two best opened bonuses (by multiplier). The current row is marked with arrows:
 
 ```text
 > 1. GATES OF OLYMPUS  (₽10.3k) = ₽2.5k  0.25X  <
 ```
 
-Результат `0` считается открытой бонуской, если его явно ввели в поле выплаты. Пустое поле — бонуска ещё не открыта.
+A payout of `0` counts as opened if you actually typed `0`. An empty payout field means the bonus is still closed.
 
-## Как это устроено
+## How it works
 
 ```text
   ┌─────────────┐          PUT /api/state           ┌──────────────────┐
-  │   /admin    │  ───────────────────────────────► │  Node.js сервер  │
-  │  стример    │                                   │  ADMIN_TOKEN     │
+  │   /admin    │  ───────────────────────────────► │  Node.js server  │
+  │  streamer   │                                   │  ADMIN_TOKEN     │
   └─────────────┘                                   │  data/state.json │
                                                     └────────┬─────────┘
                                                              │ GET /api/state
                                                              ▼
                                                     ┌──────────────────┐
                                                     │   OBS Browser    │
-                                                    │   источник  /    │
+                                                    │   source      /  │
                                                     └──────────────────┘
 ```
 
-- Состояние хранится на сервере в `data/state.json`, а не в браузере OBS.
-- Публичная страница опрашивает сервер каждые ~750 мс и обновляется без перезагрузки источника.
-- Админка сохраняет изменения с небольшой задержкой (после ввода).
-- Локально, без сервера, виджет умеет работать через `localStorage` — удобно просто открыть `index.html`.
+- State lives on the server in `data/state.json`, not inside the OBS browser source.
+- The public page polls about every 750 ms and refreshes without reloading the source.
+- Admin saves shortly after you type.
+- Offline, you can open `index.html` directly: data stays in `localStorage`, but OBS and admin will not stay in sync.
 
-## Быстрый старт
+## Quick start
 
-Нужен **Node.js 18+**.
+Requires **Node.js 18+**.
 
 ```bash
-git clone https://github.com/sssaturX/widget.git
+git clone https://github.com/sssaturX/BonusBuy-OBSwidget.git
 cd widget
 
 export ADMIN_TOKEN="$(openssl rand -hex 32)"
@@ -80,121 +80,121 @@ export PORT=3000
 npm start
 ```
 
-Откройте:
+Then open:
 
-| Страница | Адрес | Для кого |
+| Page | URL | Who it's for |
 | --- | --- | --- |
-| Виджет | http://localhost:3000/ | OBS, зрители, превью |
-| Админка | http://localhost:3000/admin | Стример |
+| Widget | http://localhost:3000/ | OBS, viewers, preview |
+| Admin | http://localhost:3000/admin | Streamer |
 
-При первом заходе в `/admin` браузер спросит `ADMIN_TOKEN`. Токен живёт только в текущей вкладке (`sessionStorage`) и **не должен** попадать зрителям.
+The first visit to `/admin` asks for `ADMIN_TOKEN`. The token stays in the current tab only (`sessionStorage`) and **must not** be shown to viewers.
 
-Без сервера можно просто открыть `index.html` в браузере: данные сохранятся локально, но OBS и админка не будут синхронизироваться.
+Without the server, you can still open `index.html` in a browser. That is fine for a local preview, not for a live OBS + admin setup.
 
-## Настройка OBS
+## OBS setup
 
-Рекомендуемый размер источника даёт максимально чёткий текст без сглаживания.
+The sizes below keep the overlay sharp.
 
-1. Источники → **Браузер**.
-2. URL — публичный адрес виджета **без** `/admin`.
-3. Ширина **480**, высота **523**.
-4. FPS можно оставить 30.
-5. ПКМ по источнику → Трансформировать → **Сбросить трансформацию**.
-6. Масштаб источника на сцене держите **100%**.
+1. Sources → **Browser**.
+2. URL — the public widget address **without** `/admin`.
+3. Width **480**, height **523**.
+4. FPS can stay at 30.
+5. Right-click the source → Transform → **Reset Transform**.
+6. Keep the source scale on the scene at **100%**.
 
-Виджет сам вписывается в окно браузерного источника, сохраняет пропорции и центрируется. Размер меняйте только в свойствах источника, не растягиванием на сцене.
+The widget scales to the browser source, keeps aspect ratio, and centers itself. Change size in the browser source properties, not by stretching it on the scene.
 
-| Размер | Масштаб | Когда брать |
+| Size | Scale | Use when |
 | --- | --- | --- |
-| `480 × 523` | 1× | Основной, самый чёткий |
-| `960 × 1046` | 2× | Крупный оверлей на большой сцене |
+| `480 × 523` | 1× | Default, sharpest |
+| `960 × 1046` | 2× | Larger overlay on a big scene |
 
-Промежуточные размеры могут чуть мылить мелкий текст.
+In-between sizes can slightly blur small type.
 
-## Админка
+## Admin panel
 
-Через `/admin` можно:
+From `/admin` you can:
 
-- ставить номер сессии `BONUSBUY#`;
-- выбирать валюту: **₽ RUB**, **$ USD**, **€ EUR**, **₸ KZT**, **₴ UAH**, **£ GBP**;
-- добавлять и удалять бонуски;
-- вводить название слота, стоимость и выплату;
-- выбирать текущую бонуску кликом или стрелками **↑ / ↓**;
-- переходить к следующему полю клавишей **Enter**.
+- set the session number `BONUSBUY#`;
+- pick a currency: **₽ RUB**, **$ USD**, **€ EUR**, **₸ KZT**, **₴ UAH**, **£ GBP**;
+- add and remove bonuses;
+- enter slot name, buy-in, and payout;
+- select the current bonus with a click or **↑ / ↓**;
+- move to the next field with **Enter**.
 
-Публичная страница этих контролов не показывает: случайно стереть список из OBS нельзя.
+The public page hides those controls, so OBS cannot wipe the list by accident.
 
-## Установка на VPS
+## VPS install
 
-Скрипт рассчитан на **Debian / Ubuntu**: поднимет Node.js, systemd, Nginx и по возможности HTTPS.
+The script targets **Debian / Ubuntu**. It installs Node.js, systemd, Nginx, and HTTPS when DNS is ready.
 
 ```bash
 sudo bash deploy-vps.sh
 ```
 
-Скрипт предложит адрес вида `widget.example.com`. Без вопроса:
+It will suggest an address like `widget.example.com`. Non-interactive:
 
 ```bash
 sudo WIDGET_DOMAIN=widget.example.com bash deploy-vps.sh
 ```
 
-Порт приложения можно задать через `WIDGET_PORT` (по умолчанию `3000`).
+Override the app port with `WIDGET_PORT` (default `3000`).
 
-После установки появятся:
+After install you get:
 
-- виджет: `https://ваш-домен/`;
-- админка: `https://ваш-домен/admin`;
-- токен админки — **только в выводе скрипта**, в репозиторий он не попадает.
+- widget: `https://your-domain/`;
+- admin: `https://your-domain/admin`;
+- admin token — **printed by the script only**, never stored in the repo.
 
-Логи сервиса:
+Service logs:
 
 ```bash
 journalctl -u bonus-buy-widget -f
 ```
 
-## Переменные окружения
+## Environment
 
-| Переменная | Обязательно | По умолчанию | Зачем |
+| Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| `ADMIN_TOKEN` | да | — | Пароль на запись состояния |
-| `PORT` | нет | `3000` | Порт HTTP-сервера |
-| `HOST` | нет | `0.0.0.0` | На VPS деплой ставит `127.0.0.1` за Nginx |
-| `DATA_FILE` | нет | `data/state.json` | Файл состояния |
+| `ADMIN_TOKEN` | yes | — | Secret for writing state |
+| `PORT` | no | `3000` | HTTP port |
+| `HOST` | no | `0.0.0.0` | VPS deploy binds `127.0.0.1` behind Nginx |
+| `DATA_FILE` | no | `data/state.json` | State file |
 
-Без `ADMIN_TOKEN` сервер не запустится.
+The server will not start without `ADMIN_TOKEN`.
 
 ## API
 
-| Метод | Путь | Доступ | Назначение |
+| Method | Path | Access | Purpose |
 | --- | --- | --- | --- |
-| `GET` | `/api/state` | публичный | Текущее состояние виджета |
-| `PUT` | `/api/state` | `Authorization: Bearer <ADMIN_TOKEN>` | Сохранить состояние |
-| `GET` | `/` | публичный | Страница для OBS |
-| `GET` | `/admin` | публичная страница, запись только с токеном | Панель управления |
+| `GET` | `/api/state` | public | Current widget state |
+| `PUT` | `/api/state` | `Authorization: Bearer <ADMIN_TOKEN>` | Save state |
+| `GET` | `/` | public | OBS page |
+| `GET` | `/admin` | public page, writes need the token | Control panel |
 
-Состояние — JSON со списком бонусок, номером сессии, валютой и индексом текущей строки. Сервер обрезает слишком длинные названия, ограничивает список 200 строками и пропускает только известные валюты.
+State is JSON: bonus rows, session number, currency, and the current row index. The server trims long names, caps the list at 200 rows, and accepts only known currencies.
 
-## Безопасность
+## Security
 
-- Токен админки задаётся только через окружение, в git его нет.
-- `PUT /api/state` без заголовка `Authorization` отвечает `401`.
-- Публичный виджет умеет только читать состояние.
-- На VPS токен генерируется (`openssl rand -hex 32`) и лежит в `/etc/bonus-buy-widget/widget.env` с правами `0600`.
+- The admin token comes from the environment. It is not in git.
+- `PUT /api/state` without `Authorization` returns `401`.
+- The public widget can only read state.
+- On a VPS the token is generated with `openssl rand -hex 32` and stored in `/etc/bonus-buy-widget/widget.env` with mode `0600`.
 
-Не стримьте экран с `/admin` и не кидайте токен в чат.
+Do not stream the `/admin` tab and do not paste the token in chat.
 
-## Стек
+## Stack
 
-Один процесс Node.js, без фреймворков и базы данных.
+One Node.js process. No framework, no database.
 
 ```text
-index.html   разметка виджета
-style.css    тёмная тема под слот-стримы
-script.js    статистика, админка, синхронизация
-server.js    HTTP, статика, API, сохранение JSON
-deploy-vps.sh  установка на Debian/Ubuntu
+index.html     widget markup
+style.css      dark theme for slot streams
+script.js      stats, admin, sync
+server.js      HTTP, static files, API, JSON storage
+deploy-vps.sh  Debian/Ubuntu install
 ```
 
-## Лицензия
+## License
 
 [MIT](LICENSE)
