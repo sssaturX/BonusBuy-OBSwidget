@@ -1,8 +1,9 @@
 {
-  "name": "santori-bonus-buy-widget",
+  "name": "bonus-buy-widget",
   "version": "1.0.0",
   "private": true,
-  "description": "Server-hosted OBS bonus buy widget with an admin view",
+  "license": "MIT",
+  "description": "OBS-виджет BonusBuy для стримеров: закупы, иксы и окуп в реальном времени",
   "scripts": {
     "start": "node server.js",
     "check": "node --check server.js && node --check script.js"

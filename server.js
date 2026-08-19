@@ -158,6 +158,6 @@ const server = http.createServer(async (request, response) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`OBS widget: http://${HOST}:${PORT}/`);
-  console.log(`Admin panel: http://${HOST}:${PORT}/admin`);
+  console.log(`BonusBuy widget: http://${HOST}:${PORT}/`);
+  console.log(`Admin panel:    http://${HOST}:${PORT}/admin`);
 });

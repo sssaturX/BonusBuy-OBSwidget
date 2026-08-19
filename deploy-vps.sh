@@ -6,7 +6,7 @@ set -Eeuo pipefail
 # Optional non-interactive usage:
 #   sudo WIDGET_DOMAIN=widget.example.com bash deploy-vps.sh
 
-APP_NAME="santori-widget"
+APP_NAME="bonus-buy-widget"
 APP_DIR="/opt/${APP_NAME}"
 STATE_DIR="/var/lib/${APP_NAME}"
 ENV_DIR="/etc/${APP_NAME}"
@@ -118,7 +118,7 @@ fi
 say "Настройка systemd"
 cat >"${SERVICE_FILE}" <<EOF
 [Unit]
-Description=Santori Bonus Buy Widget
+Description=BonusBuy Widget
 After=network-online.target
 Wants=network-online.target
 
